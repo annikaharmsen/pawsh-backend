@@ -1,61 +1,216 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Pawsh E-Commerce API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API for an e-commerce platform built with Laravel 12, featuring shopping cart management, Stripe payment integration, order processing, and an admin dashboard with analytics.
 
-## About Laravel
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pawsh E-Commerce API provides a complete backend solution for online retail operations. The API handles user authentication, product catalog management, shopping cart functionality, secure payment processing through Stripe, and comprehensive order tracking. An admin dashboard offers insights into customer behavior, sales metrics, and inventory status.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **User Authentication**: Secure registration and login using Laravel Sanctum token-based authentication
+- **Product Management**: Browse product catalog with detailed product information and images
+- **Shopping Cart**: Add, update, and remove items from cart with real-time quantity management
+- **Address Management**: Store and manage multiple shipping addresses per user
+- **Checkout Process**: Streamlined checkout flow with Stripe payment integration
+- **Order Tracking**: Complete order history with status tracking and payment confirmation
+- **Admin Dashboard**: Analytics and reports for customers, orders, products, and revenue
+- **Stripe Webhooks**: Automatic order status updates based on payment events
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Backend**: PHP 8.2, Laravel 12.0
+- **Authentication**: Laravel Sanctum 4.0
+- **Payment Processing**: Stripe PHP SDK 17.4
+- **Database**: SQLite
+- **Development Tools**: Laravel Pint, Laravel Sail, PHPUnit
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
 
-## Laravel Sponsors
+- PHP 8.2 or higher
+- Composer
+- Node.js and npm
+- SQLite
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Setup
 
-### Premium Partners
+1. Clone the repository:
+```bash
+git clone https://github.com/annikaharmsen/pawsh-backend
+cd pawsh-backend
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. Install PHP dependencies:
+```bash
+composer install
+```
 
-## Contributing
+3. Install Node dependencies:
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Create environment file:
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+5. Generate application key:
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Configure your environment variables in `.env`:
+```env
+APP_NAME="Pawsh E-Commerce API"
+APP_URL=http://localhost:8000
 
-## Security Vulnerabilities
+DB_CONNECTION=sqlite
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+STRIPE_API_KEY=your_stripe_secret_key
+```
+
+7. Create SQLite database:
+```bash
+touch database/database.sqlite
+```
+
+8. Run migrations:
+```bash
+php artisan migrate
+```
+
+9. (Optional) Seed the database with sample data:
+```bash
+php artisan db:seed
+```
+
+## Usage
+
+### Starting the Development Server
+
+Run all services concurrently (server, queue, logs, and Vite):
+```bash
+composer dev
+```
+
+Or run services individually:
+```bash
+php artisan serve
+php artisan queue:listen
+npm run dev
+```
+
+The API will be available at `http://localhost:8000`.
+
+### API Endpoints
+
+#### Authentication
+```http
+POST /api/register        # Register new user
+POST /api/login           # Login user
+DELETE /api/delete-account/{user}  # Delete user account
+```
+
+#### Products
+```http
+GET /api/products         # List all products
+GET /api/products/{id}    # Get single product
+```
+
+#### Shopping Cart
+```http
+GET /api/cart             # Get cart items
+POST /api/cart            # Add item to cart
+PUT /api/cart/{id}        # Update cart item quantity
+DELETE /api/cart/{id}     # Remove item from cart
+```
+
+#### Orders
+```http
+GET /api/orders           # Get user's orders
+POST /api/orders          # Create new order
+GET /api/orders/{id}      # Get order details
+```
+
+#### Addresses
+```http
+GET /api/addresses        # List user's addresses
+POST /api/addresses       # Create new address
+PUT /api/addresses/{id}   # Update address
+DELETE /api/addresses/{id} # Delete address
+```
+
+#### Checkout
+```http
+POST /api/checkout/shipping/{order}  # Set shipping address
+POST /api/checkout/session/{order}   # Create Stripe session
+GET /api/checkout/status/{session}   # Check payment status
+POST /api/checkout/stripe-webhook    # Handle Stripe webhooks
+```
+
+#### Admin Dashboard
+```http
+GET /api/admin/dashboard/overview          # Dashboard overview
+GET /api/admin/dashboard/customers-report  # Customer analytics
+GET /api/admin/dashboard/orders-report     # Order analytics
+GET /api/admin/dashboard/products-report   # Product analytics
+```
+
+### Authentication
+
+Most endpoints require authentication using Laravel Sanctum. Include the bearer token in the Authorization header:
+
+```http
+Authorization: Bearer {token}
+```
+
+Obtain a token by logging in via `/api/login`.
+
+### Stripe Webhook Configuration
+
+To receive real-time payment updates, configure your Stripe webhook:
+
+1. In your Stripe dashboard, add a webhook endpoint: `https://yourdomain.com/api/checkout/stripe-webhook`
+2. Subscribe to these events:
+   - `checkout.session.completed`
+   - `checkout.session.async_payment_succeeded`
+   - `checkout.session.async_payment_failed`
+
+## Database Schema
+
+The application uses the following core models:
+
+- **User**: Customer accounts with authentication
+- **Product**: Product catalog items
+- **CartItem**: Shopping cart entries
+- **Address**: Customer shipping/billing addresses
+- **Order**: Order records with status tracking
+- **OrderItem**: Line items for each order
+- **Payment**: Payment transaction records
+- **PaymentMethod**: Stored payment methods
+
+## Testing
+
+Run the test suite:
+```bash
+composer test
+```
+
+Or use PHPUnit directly:
+```bash
+php artisan test
+```
+
+## Code Style
+
+This project uses Laravel Pint for code formatting:
+```bash
+./vendor/bin/pint
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.
